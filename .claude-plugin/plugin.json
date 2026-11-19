@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "speech-to-text-kit",
+  "displayName": "Speech-to-Text Kit",
+  "version": "0.1.1",
+  "description": "Turn recordings into text on your own Mac: local Whisper transcription (audio-to-text), then a faithful, readable article with every correction marked (transcript-readable).",
+  "author": { "name": "lllyys" },
+  "homepage": "https://github.com/lllyys/speech-to-text-kit",
+  "repository": "https://github.com/lllyys/speech-to-text-kit",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugin", "skills", "whisper", "mlx", "transcription", "speech-to-text", "subtitles", "chinese"]
+}

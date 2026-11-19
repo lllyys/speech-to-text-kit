@@ -1,0 +1,14 @@
+{
+  "name": "speech-to-text-kit",
+  "owner": { "name": "lllyys" },
+  "metadata": {
+    "description": "Speech-to-Text Kit: local Whisper transcription and readable transcripts for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "speech-to-text-kit",
+      "source": ".",
+      "description": "Turn recordings into text on your own Mac: local Whisper transcription, then a faithful, readable article with every correction marked."
+    }
+  ]
+}
