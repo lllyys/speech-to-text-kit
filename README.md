@@ -5,7 +5,7 @@ A Claude Code plugin that turns recordings — lectures, talks, podcasts, voice 
 | Skill | What it does |
 |---|---|
 | **audio-to-text** | Audio/video → time-stamped raw transcript (`[mm:ss] …`), optionally `.srt` subtitles. Local Whisper via [mlx-whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper); nothing is uploaded. Batches whole folders and skips files already done. |
-| **transcript-readable** | Raw transcript → readable Markdown article: paragraphs and section headings, fillers and ASR repeats removed, the speaker's own wording kept. Every corrected word is marked inline (`贝叶斯推理〔原转写为“BIS推理”〕`), unclear spots are flagged `[?]`, and a correction list with timestamps closes the document. |
+| **transcript-readable** | Raw transcript → readable Markdown article: paragraphs and section headings, fillers and ASR repeats removed, the speaker's own wording kept. The body shows corrected wording without inline notes by default. Unclear spots are flagged `[?]`, and the final correction table preserves the original wording and timestamps. Inline notes are available on request. |
 
 Tuned for Mandarin (simplified Chinese with punctuation); works for English and other languages Whisper supports.
 

@@ -1,17 +1,17 @@
 ---
 name: transcript-readable
-description: Turn a raw speech-to-text transcript (or an audio recording) of a talk, lecture, podcast or meeting into an easy-to-read Markdown version — paragraphs under section headings, filler words and ASR repeats removed, the speaker's own wording kept, mis-heard words corrected inline with visible markers, unclear spots flagged, and a correction list with timestamps at the end. Use this whenever the user wants a transcript cleaned up, made readable, or turned into an article or notes they can read — including Whisper / 语音转文字 output, time-stamped [mm:ss] lines, downloaded lecture replays, and requests like "make it easier to read", "整理成文字稿", "transcript_readable", even if they don't say "transcript". Not for summarizing or translating — the result keeps what the speaker said. For just getting the raw text out of audio, use audio-to-text.
+description: Turn a raw speech-to-text transcript (or an audio recording) of a talk, lecture, podcast or meeting into an easy-to-read Markdown version — paragraphs under section headings, filler words and ASR repeats removed, the speaker's own wording kept, mis-heard words corrected in clean prose by default, unclear spots flagged, and a correction list with timestamps at the end. Use this whenever the user wants a transcript cleaned up, made readable, or turned into an article or notes they can read — including Whisper / 语音转文字 output, time-stamped [mm:ss] lines, downloaded lecture replays, and requests like "make it easier to read", "整理成文字稿", "transcript_readable", even if they don't say "transcript". Not for summarizing or translating — the result keeps what the speaker said. For just getting the raw text out of audio, use audio-to-text.
 ---
 
 # transcript-readable
 
-Produce a faithful, readable written version of a spoken recording. The reader should be able to read it like an article, while still being able to trust that every sentence is something the speaker actually said — and to see exactly where you changed a word.
+Produce a faithful, readable written version of a spoken recording. The reader should be able to read it like an article, while still being able to trust that every sentence is something the speaker actually said — and to trace word corrections in an end-of-document log.
 
 The two failure modes to avoid pull in opposite directions:
 - **Too raw**: one fragment per line, 对吧 every other sentence, obvious mis-hearings left in. Unreadable.
 - **Too polished**: you rewrote, summarized, or "improved" the argument. Now it's your text, not theirs, and the reader can't tell. This is worse, because it is silent.
 
-So: restructure and remove noise freely, but change *words* only where the transcription is wrong — and mark every such change.
+So: restructure and remove noise freely, but change *words* only where the transcription is wrong — and record every such change in the correction log.
 
 ## Step 1 — Get a raw transcript
 
@@ -57,20 +57,13 @@ Note who the speaker is if the context tells you (course name, how they refer to
 
 Do not summarize, compress, add transitions that introduce new ideas, or add your own explanations into the body.
 
-**Corrections — mark every one**
-When a word is clearly mis-transcribed and context tells you what was said, write the correct word followed by a marker with the original:
+**Corrections — keep the body clean by default**
 
-> 贝叶斯推理〔原转写为“BIS推理”〕
+When a word is clearly mis-transcribed and the context supports a correction, write only the corrected wording in the body. For example, write `贝叶斯推理`, not an inline explanation. In the final correction table, record the original wording (`BIS推理`), the correction, and its timestamp. Group repeated identical corrections into one row with their timestamps.
 
-Use the marker language of the transcript (for English: `[transcribed as "..."]`). Typical ASR errors worth fixing (transcribed → meant):
-- Homophones / near-homophones: 地规→递归, 心而上→形而上, 平坦标准→评判标准, 遍例→遍历.
-- English product and model names: Cloud→Claude, DeepSick→DeepSeek, mark-文件→Markdown 文件.
-- People's names: 黄人熊→黄仁勋, 黄书俊→黄舒骏; inconsistent spellings of the same person (Cesar/Ceaser → Caesar).
-- Titles of works: VVendant → 《V字仇杀队》(*V for Vendetta*).
+Only if the user explicitly asks for inline markup or review mode, show `贝叶斯推理〔原转写为“BIS推理”〕` in the body (English: `Bayesian inference [transcribed as "BIS inference"]`). Keep the correction table in this mode too.
 
-Correcting a name's spelling to its standard form everywhere is fine; list it once in the correction table rather than marking every occurrence.
-
-**When you're not sure, don't guess** — keep the transcribed text and add **[?]**, optionally with your best guess: `Grokbot [?]〔原转写为“Glockbot”〕`. A wrong confident correction is worse than an honest [?], because the reader will trust it.
+**When you're not sure, don't guess.** Keep the transcribed wording and add `[?]`. Put any tentative interpretation in the uncertainty table with its timestamp, not in the body.
 
 ## Step 4 — Output file
 
@@ -84,7 +77,7 @@ Use this layout, with labels in the transcript's language:
 <course/source> · <date> · 约 <N> 分钟
 
 > 由录音自动转写（<model>），再整理成段落：删去口头禅和重复句，原话的意思和用词尽量保留。
-> **〔方括号〕** 里是对听错词的更正；**[?]** 表示听不清、无法确定。完整更正清单见文末。
+> 术语更正及对应时间见文末；**[?]** 表示听不清、无法确定。
 > 原始逐句转写（带时间码）：`transcript.txt`
 
 ---
@@ -115,7 +108,8 @@ Take timestamps from the raw transcript lines so the user can jump to the spot i
 
 Skim the raw transcript against your version once more:
 - Did any section of the talk go missing? (Check the last raw timestamp appears in the flow — endings get dropped.)
-- Is every changed word either marked inline or covered by a name-spelling row in the table?
+- Does the correction table trace every substantive wording correction to the original and its timestamp?
+- In the default reading mode, is the body free of inline correction notes, with only necessary `[?]` markers?
 - Did you add anything the speaker didn't say? Remove it.
 
 Then tell the user where the file is, what you changed in a sentence or two, and point out the [?] spots — those are where their ear is needed.
